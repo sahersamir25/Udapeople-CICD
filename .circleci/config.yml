@@ -64,9 +64,9 @@ jobs:
       - run:
           name: Build front-end
           command: |
-            cd frontend
-            npm install
-            npm run build 
+             cd frontend
+             npm install
+             npm run build 
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-deps
@@ -156,7 +156,7 @@ jobs:
       - run:
           name: Ensure back-end infrastructure exists
           command: |
-            aws cloudformation deploy \
+             aws cloudformation deploy \
                --template-file .circleci/files/backend.yml \
                --tags project=udapeople \
                --stack-name "udpeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
@@ -174,12 +174,12 @@ jobs:
       - run:
           name: Add back-end ip to ansible inventory
           command: |
-            BACKEND_PUBLIC_IP=$(aws ec2 describe-instances\
+             BACKEND_PUBLIC_IP=$(aws ec2 describe-instances\
                --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}"\ 
                --query 'Reservations[*].Instances[*].PublicIpAddress'\
                --output text) 
-            echo $BACKEND_PUBLIC_IP >> .circleci/ansible/inventory.txt
-            cat  .circleci/ansible/inventory.txt
+             echo $BACKEND_PUBLIC_IP >> .circleci/ansible/inventory.txt
+             cat  .circleci/ansible/inventory.txt
       - persist_to_workspace:
           root: ~/
           paths:
