@@ -191,7 +191,8 @@ jobs:
       - destroy-environment     
 
   configure-infrastructure:
-    docker: cimg/base:stable
+    docker: 
+      - image: cimg/base:stable
     steps:
       - Checkout
       - install_ansible
