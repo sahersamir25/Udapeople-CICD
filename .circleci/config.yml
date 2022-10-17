@@ -55,7 +55,7 @@ commands:
             then
              cd ~/project/backend
              npm install
-             npm run migration:revet
+             npm run migrations:revet
 
             fi
             
@@ -233,9 +233,7 @@ jobs:
       - destroy-environment 
       - revert-migrations
 
-            
-     
-
+          
 #   deploy-frontend:
 #     docker:
 #       # Docker image here that supports AWS CLI
