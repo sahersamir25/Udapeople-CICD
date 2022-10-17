@@ -37,7 +37,7 @@ commands:
             aws s3 rm s3://udapeople-<<parameters.Workflow_ID>> --recursive
             aws cloudformation delete-stack --stack-name udapeople-frontend-<< parameters.Workflow_ID >>
             
-            
+
   revert-migrations:
     description: Revert the last migration 
     parameters:
@@ -47,7 +47,6 @@ commands:
       - run:
           name: Revert migrations
           when: on_fail
-          # Add when this will run
           command: |
             SUCCESS=$( curl --insecure https://kvdb.io/${KVDB_BUCKET}/migration_<< parameters.Workflow_ID >>) 
 
@@ -226,9 +225,9 @@ jobs:
       - run:
           name: Send migration results to kvdb.io
           command: |
-             if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt 
-             then
-             curl https://kvdb.io/${KVDB_BUCKET}/migration_${CIRCLE_WORKFLOW_ID:0:7} -d '1' fi 
+           if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt 
+           then
+            curl https://kvdb.io/${KVDB_BUCKET}/migration_${CIRCLE_WORKFLOW_ID:0:7} -d '1' fi 
 
 
       - destroy-environment 
