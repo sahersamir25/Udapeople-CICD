@@ -39,28 +39,28 @@ commands:
             aws cloudformation delete-stack --stack-name udapeople-frontend-<< parameters.Workflow_ID >>
             
 
-  # revert-migrations:
-  #   description: Revert the last migration 
-  #   parameters:
-  #     Workflow_ID: 
-  #       type: string
-  #       default: ${CIRCLE_WORKFLOW_ID:0:7}     
-  #   steps:
-  #     - run:
-  #         name: Revert migrations
-  #         when: on_fail
-  #         command: |
-  #           SUCCESS=$( curl --insecure https://kvdb.io/${KVDB_BUCKET}/migration_<< parameters.Workflow_ID >>) 
+  revert-migrations:
+    description: Revert the last migration 
+    parameters:
+      Workflow_ID: 
+        type: string
+        default: ${CIRCLE_WORKFLOW_ID:0:7}     
+    steps:
+      - run:
+          name: Revert migrations
+          when: on_fail
+          command: |
+           export SUCCESS=$( curl --insecure https://kvdb.io/${KVDB_BUCKET}/migration_${CIRCLE_WORKFLOW_ID:0:7}) 
+           echo "SUCCESS"
+            SUCCESS = 1
+            if(( $SUCCESS==1 )); 
+            then
+             cd ~/project/backend
+             npm install
+             npm run migration:revert
 
-  #           SUCCESS = 1
-  #           if(( $SUCCESS==1 )); 
-  #           then
-  #            cd ~/project/backend
-  #            npm install
-  #            npm run migrations:revert
+            fi
 
-  #           fi
-            
 jobs:
   build-frontend:
     docker:
@@ -214,26 +214,30 @@ jobs:
 
   run-migrations:
     docker:
-      - image: cimg/node:13.8.0
+      - image: circleci/node:13.8.0    
     steps:
-      - checkout 
+      - checkout
       - install_awscli
       - run:
           name: Run migrations
           command: |
-           cd backend
-           npm install 
-           npm run migrations > migrations_dump.txt
+            cd backend
+            npm install
+            export TYPEORM_MIGRATIONS_DIR=./src/migrations
+            export TYPEORM_ENTITIES=./src/modules/domain/**/*.entity{.ts,.js}
+            export TYPEORM_MIGRATIONS=./src/migrations/*.ts
+            npm run migrations > migration.txt
       - run:
-          name: Send migration results to kvdb.io
+          name: Send migration results to kvdb
           command: |
-           if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt 
-           then
-            curl https://kvdb.io/${KVDB_BUCKET}/migration_${CIRCLE_WORKFLOW_ID:0:7} -d '1' fi 
+            if grep -q "has been executed successfully." ~/project/backend/migration.txt
+            then
+              curl https://kvdb.io/${KVDB_BUCKET}/migration_${CIRCLE_WORKFLOW_ID:0:7} -d '1'
+            fi
 
+      - revert-migrations
+      - destroy-environment
 
-      - destroy-environment 
-      # - revert-migrations
           
   deploy-frontend:
     docker:
