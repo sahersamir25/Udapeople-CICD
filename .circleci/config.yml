@@ -226,12 +226,14 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - checkout
+      - restore_cache:
+          keys: [backend-deps]
       - run:
           name: Run migrations
           command: |
             cd backend
-            npm install
-            npm run migrations:revert
+            npm install typescript
+  # npm run migrations:revert
             npm run migrations > migrations_dump.txt
             cat migrations_dump.txt
       - run:
