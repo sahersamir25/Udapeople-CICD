@@ -87,7 +87,6 @@ jobs:
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-deps
-
   build-backend:
     docker:
       - image: cimg/node:13.8.0
@@ -277,7 +276,6 @@ jobs:
             aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
 
       - destroy-environment
-             
   deploy-backend:
     docker:
       - image: cimg/node:13.8.0
@@ -303,9 +301,9 @@ jobs:
             cd backend
             npm run build
             tar -czf artifact.tar.gz dist/* package*
-
             cd ..
             cd backend/artifact.tar.gz .circleci/ansible/deploy/files
+
       - run:
           name: Deploy backend
           command: |
