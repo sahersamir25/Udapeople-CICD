@@ -233,7 +233,6 @@ jobs:
           command: |
             cd backend
             npm install typescript
-  # npm run migrations:revert
             npm run migrations > migrations_dump.txt
             cat migrations_dump.txt
       - run:
