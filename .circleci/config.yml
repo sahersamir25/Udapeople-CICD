@@ -88,9 +88,9 @@ jobs:
           paths: [frontend/node_modules]
           key: frontend-deps
 
-  build-backend:
+   build-backend:
     docker:
-      - image: cimg/node:13.8.0
+      - image: circleci/node:13.8.0
     steps:
       - checkout
       - restore_cache:
@@ -99,11 +99,20 @@ jobs:
           name: Back-end build
           command: |
              cd backend
-             npm install
-             npm run build
+             npm install 
+             npm run build 
       - save_cache:
-          paths: [backend/node_modules]
-          key: backend-deps
+          paths:
+           - ./backend/node_modules
+          key: backend-build
+      - run:
+          name: Compiled code will be retrieved by deploy-backend.yml 
+          command: |
+            mkdir /tmp/workspace/
+            cp ./backend/package.json /tmp/workspace/
+            cd backend/dist
+            tar -zcvf /tmp/workspace/backend.tar.gz ./
+            tar -zcvf ./../../backend.tar.gz ./
 
   test-frontend:
     docker:
