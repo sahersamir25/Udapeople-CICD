@@ -296,6 +296,7 @@ jobs:
             npm install
       - run:
           name: Deploy backend
+          no_output_timeout: 20m
           command: |
           
             cd backend
