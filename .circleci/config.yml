@@ -208,7 +208,7 @@ jobs:
       - checkout
       - install_ansible
       - add_ssh_keys:
-           fingerprints: ["7a:31:3e:8b:fb:82:b4:c0:d0:c6:a6:f7:7b:c2:43:e1"]
+          fingerprints: ["7a:31:3e:8b:fb:82:b4:c0:d0:c6:a6:f7:7b:c2:43:e1"]
       - attach_workspace:
            at: ~/
       - run:
@@ -277,7 +277,7 @@ jobs:
       - destroy-environment
   deploy-backend:
     docker:
-      - image: cimg/node:13.8.0
+      - image: cimg/base:stable
     steps:
       - checkout
       - install_awscli
