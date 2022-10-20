@@ -1,0 +1,16 @@
+Public Url to GitHub repository [URL01]
+https://github.com/sahersamir25/Udapeople-CICD
+
+Public URL for your S3 Bucket (aka, your green candidate front-end) [URL02]
+http://udapeople-b9e6055.s3-website-us-east-1.amazonaws.com/
+
+Public URL for your CloudFront distribution [URL03]
+https://udapeople-f2leqw8n.s3.amazonaws.com/
+
+Public URL to deployed application back-end in EC2 [URL04]
+http://54.234.183.226:3030/api/status
+
+
+Public URL to your Prometheus Server [URL05]
+  http://ec2-3-89-123-221.compute-1.amazonaws.com:9090/
+
